@@ -15,11 +15,47 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequiredLength = 1;
 }).AddEntityFrameworkStores<AppDbContext>();  
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Auth/Login";
+    options.AccessDeniedPath = "/Auth/AccessDenied";
+    options.ExpireTimeSpan= TimeSpan.FromDays(7);
+    options.SlidingExpiration=true;
+
+
+}); 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 var app = builder.Build();
+
+ //Manual Dependency Injection
+using (var scope = app.Services.CreateScope())
+   {
+    var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var _roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    string adminEmail = "admin@gmail.com";
+    string password = "admin";
+
+    var existingAdmin = await _roleManager.FindByNameAsync("Admin");
+    if (existingAdmin==null)
+    {
+        await _roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+     var existingEmail= await _userManager.FindByEmailAsync(adminEmail);
+    if (existingEmail == null)
+    {
+        var adminUser = new IdentityUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail
+        };
+        await _userManager.CreateAsync(adminUser, password);
+        await _userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+}
 
 
 // Configure the HTTP request pipeline.

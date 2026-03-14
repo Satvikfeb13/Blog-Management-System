@@ -20,10 +20,12 @@
 
     }
 </style>
-<div class="text-end">
-    <a class="btn btn-secondary my-3" asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id">Edit Post</a>
-    <a class="btn btn-secondary btn-danger mx-3" asp-controller="Post" asp-action="Delete" asp-route-id="@Model.Id">Delete Post</a>
-</div>
+@if (User.IsInRole("Admin")){
+    <div class="text-end">
+        <a class="btn btn-secondary my-3" asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id">Edit Post</a>
+        <a class="btn btn-secondary btn-danger mx-3" asp-controller="Post" asp-action="Delete" asp-route-id="@Model.Id">Delete Post</a>
+    </div>
+}
 <div class="content-wrapper">
     <h1>@Model.Title</h1>
     <p>
@@ -62,9 +64,12 @@
         <p class="text-muted">No comment yet. be the first to comment</p>
         
     }
+    @if (User.Identity.IsAuthenticated)
+    {
     <h4>Add a Comment</h4>
 
-    <form id="commentForm">
+
+        <form id="commentForm">
             <div class="form-group">
                 <label for="Username">Name</label>
             <input for="Username" id="Username" name="Username" required class="form-control" />
@@ -76,7 +81,12 @@
 
         <button type="submit" class=" btn btn-primary mt-2 p-2 rounded">Submit Comment</button>
         </form>
-    
+    }
+    else
+    {
+        
+    }
+
 </div>
 
 @section Scripts{

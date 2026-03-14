@@ -17,10 +17,13 @@ namespace BlogApp.Models
         [Required(ErrorMessage = "Author is required")]
         [MaxLength(100, ErrorMessage = "name cannot exceed 100 characters")] 
         public string Author { get; set; }
+        public string? UserId { get; set; }   
+
         [ValidateNever]
         public string FeatureImagePath { get; set; }
         [DataType(DataType.Date)]
         public DateTime PublishedDate { get; set; }=DateTime.Now;
+
 
         [ForeignKey("Category")]
 

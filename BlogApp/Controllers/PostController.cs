@@ -1,6 +1,7 @@
 ﻿using BlogApp.Data;
 using BlogApp.Models;
 using BlogApp.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ namespace BlogApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Admin")]
         public IActionResult Create()
         {
             var postviewmodel = new PostViewModel();
@@ -78,7 +80,7 @@ namespace BlogApp.Controllers
 
 
         }
-
+        [Authorize]
         public JsonResult AddComment([FromBody] Comment comment)
         {
             comment.CommentDate = DateTime.Now;
@@ -122,6 +124,8 @@ namespace BlogApp.Controllers
 
             ;
         }
+
+        [HttpGet]
         public async Task<IActionResult> Detail(int id)
         {
             if (id == null)
@@ -243,6 +247,7 @@ namespace BlogApp.Controllers
             return RedirectToAction("Index");
 
         }
+
 
 
 

@@ -1,23 +1,72 @@
-﻿<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">BlogApp</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+﻿<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <div class="container">
+
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" asp-controller="Post" asp-action="Index">
+            BlogApp
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarMain"
+                aria-controls="navbarMain"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarColor02">
-            <ul class="navbar-nav me-auto">
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+
+            <!-- Left Side Menu -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
                 <li class="nav-item">
-                    <a class="nav-link active" asp-action="Index" asp-controller="Post" >
+                    <a class="nav-link active" asp-controller="Post" asp-action="Index">
                         Home
-                        <span class="visually-hidden">(current)</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Category</a>
+                    <a class="nav-link" asp-controller="Category" asp-action="Index">
+                        Categories
+                    </a>
                 </li>
-       
+
+      
+
             </ul>
-          
+
+            <!-- Right Side Buttons -->
+
+            <div class="d-flex align-items-center gap-2">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Auth" asp-action="Logout"
+                       class="btn btn-danger btn-sm">
+                        Logout
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Auth" asp-action="Login"
+                       class="btn btn-outline-light btn-sm">
+                        Login
+                    </a>
+
+                    <a asp-controller="Auth" asp-action="Register"
+                       class="btn btn-primary btn-sm">
+                        Register
+                    </a>
+                    
+                }
+
+           
+
+             
+
+            </div>
+
         </div>
     </div>
 </nav>
