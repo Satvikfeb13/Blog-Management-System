@@ -4,6 +4,7 @@ using BlogApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260706103123_UpdateSeededData")]
+    partial class UpdateSeededData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,19 +181,10 @@ namespace BlogApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("CreatedByUserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("IsHidden")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int?>("ParentCommentId")
                         .HasColumnType("int");
 
                     b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReportedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -200,48 +194,11 @@ namespace BlogApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
-
                     b.HasIndex("ParentCommentId");
 
                     b.HasIndex("PostId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("BlogApp.Models.CommentReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AdditionalDetails")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsResolved")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("Reason")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ReportDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ReportedByUserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentId");
-
-                    b.HasIndex("ReportedByUserId");
-
-                    b.ToTable("CommentReports");
                 });
 
             modelBuilder.Entity("BlogApp.Models.Post", b =>
@@ -251,12 +208,6 @@ namespace BlogApp.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApprovedByAdminId")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("ApprovedDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -270,9 +221,6 @@ namespace BlogApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("CreatedByUserId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("FeatureImagePath")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -283,28 +231,22 @@ namespace BlogApp.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<DateTime>("PublishedDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("ReadTime")
                         .HasColumnType("int");
 
-                    b.Property<string>("RejectedReason")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Slug")
                         .HasColumnType("longtext");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("varchar(400)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("ViewCount")
                         .HasColumnType("int");
@@ -312,8 +254,6 @@ namespace BlogApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("CreatedByUserId");
 
                     b.ToTable("Posts");
 
@@ -329,7 +269,6 @@ namespace BlogApp.Migrations
                             IsPublished = true,
                             PublishedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReadTime = 0,
-                            Status = 0,
                             Title = "Tech Post 1",
                             ViewCount = 0
                         },
@@ -344,7 +283,6 @@ namespace BlogApp.Migrations
                             IsPublished = true,
                             PublishedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReadTime = 0,
-                            Status = 0,
                             Title = "Health Post 1",
                             ViewCount = 0
                         },
@@ -359,7 +297,6 @@ namespace BlogApp.Migrations
                             IsPublished = true,
                             PublishedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReadTime = 0,
-                            Status = 0,
                             Title = "Lifestyle Post 1",
                             ViewCount = 0
                         });
@@ -575,10 +512,6 @@ namespace BlogApp.Migrations
 
             modelBuilder.Entity("BlogApp.Models.Comment", b =>
                 {
-                    b.HasOne("BlogApp.Models.ApplicationUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId");
-
                     b.HasOne("BlogApp.Models.Comment", "ParentComment")
                         .WithMany("Replies")
                         .HasForeignKey("ParentCommentId");
@@ -589,28 +522,9 @@ namespace BlogApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedByUser");
-
                     b.Navigation("ParentComment");
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("BlogApp.Models.CommentReport", b =>
-                {
-                    b.HasOne("BlogApp.Models.Comment", "Comment")
-                        .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BlogApp.Models.ApplicationUser", "ReportedByUser")
-                        .WithMany()
-                        .HasForeignKey("ReportedByUserId");
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("ReportedByUser");
                 });
 
             modelBuilder.Entity("BlogApp.Models.Post", b =>
@@ -621,13 +535,7 @@ namespace BlogApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlogApp.Models.ApplicationUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId");
-
                     b.Navigation("Category");
-
-                    b.Navigation("CreatedByUser");
                 });
 
             modelBuilder.Entity("BlogApp.Models.PostLike", b =>

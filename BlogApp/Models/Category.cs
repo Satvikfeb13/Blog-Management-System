@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogApp.Models
 {
@@ -11,6 +11,7 @@ namespace BlogApp.Models
         [MaxLength(100,ErrorMessage ="Category name can not exceed 100 char")]
         public string Name { get; set; }
         public string? Description { get; set; }
+        public string? Slug { get; set; }
 
         public ICollection<Post> Posts { get; set; }
 

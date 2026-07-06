@@ -1,11 +1,11 @@
-﻿using BlogApp.Models;
+using BlogApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogApp.Data
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) :base(options) 
         {
@@ -14,7 +14,10 @@ namespace BlogApp.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<PostLike> PostLikes { get; set; }
+        public DbSet<Bookmark> Bookmarks { get; set; }
+        public DbSet<CommentReport> CommentReports { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -30,9 +33,10 @@ namespace BlogApp.Data
                     Title = "Tech Post 1",
                     Content = "Content of Tech Post 1",
                     Author = "John Doe",
-                    PublishedDate = new DateTime(2023, 1, 1), // Static date instead of DateTime.Now
+                    PublishedDate = new DateTime(2023, 1, 1),
                     CategoryId = 1,
-                    FeatureImagePath = "tech_image.jpg", // Sample image path
+                    FeatureImagePath = "tech_image.jpg",
+                    IsPublished = true,
                 },
                 new Post
                 {
@@ -40,9 +44,10 @@ namespace BlogApp.Data
                     Title = "Health Post 1",
                     Content = "Content of Health Post 1",
                     Author = "Jane Doe",
-                    PublishedDate = new DateTime(2023, 1, 1), // Static date
+                    PublishedDate = new DateTime(2023, 1, 1),
                     CategoryId = 2,
-                    FeatureImagePath = "health_image.jpg", // Sample image path
+                    FeatureImagePath = "health_image.jpg",
+                    IsPublished = true,
                 },
                 new Post
                 {
@@ -50,9 +55,10 @@ namespace BlogApp.Data
                     Title = "Lifestyle Post 1",
                     Content = "Content of Lifestyle Post 1",
                     Author = "Alex Smith",
-                    PublishedDate = new DateTime(2023, 1, 1), // Static date
+                    PublishedDate = new DateTime(2023, 1, 1),
                     CategoryId = 3,
-                    FeatureImagePath = "lifestyle_image.jpg", // Sample image path
+                    FeatureImagePath = "lifestyle_image.jpg",
+                    IsPublished = true,
                 }
                 );
         }

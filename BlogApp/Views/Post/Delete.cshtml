@@ -1,14 +1,42 @@
-﻿@model Post
+@model Post
 
 @{
-    ViewData["Title"] = " Delete Post";
+    ViewData["Title"] = "Delete Post";
+    bool isAdmin = User.IsInRole("Admin");
 }
+<style>
+    .content-wrapper {
+        padding: 40px 20px;
+        max-width: 600px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+    }
+</style>
 
-<h2>@ViewData["Title"]<h2/>
-    <h4>Do you want to delete the post</h4>
-    <form asp-controller="Post" asp-action="DeleteConfirm">
-        <input  type="hidden" asp-for="@Model.Id"/>
-        <button type="submit" class="btn btn-danger mt-2">Delete</button>
-        <a asp-action="Index" asp-controller="Post" class="btn btn-secondary mt-2">Cancel</a>
+<div class="content-wrapper" data-aos="fade-in">
+    <div class="card glass-card border-0 text-center p-5">
+        <div class="mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger bg-opacity-10" style="width: 80px; height: 80px;">
+                <i class="fas fa-exclamation-triangle fs-1 text-danger"></i>
+            </div>
+        </div>
+        <h2 class="fw-bold mb-3 text-white">Delete Blog Post?</h2>
+        <p class="text-secondary mb-4">
+            Are you sure you want to permanently delete <strong>"@Model.Title"</strong>? 
+            This action cannot be undone and all associated comments will also be removed.
+        </p>
 
-    </form>
+        <form asp-controller="Post" asp-action="DeleteConfirm" method="post">
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="d-flex justify-content-center gap-3 mt-2">
+                <a asp-action="@(isAdmin ? "Index" : "MyBlogs")" asp-controller="@(isAdmin ? "Admin" : "Post")" class="btn btn-outline-secondary rounded-pill px-4">
+                    <i class="fas fa-arrow-left me-2"></i>Cancel
+                </a>
+                <button type="submit" class="btn btn-danger rounded-pill px-4 shadow-sm">
+                    <i class="fas fa-trash me-2"></i>Yes, Delete Post
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,4 +1,5 @@
-﻿using BlogApp.Models.ViewModels;
+using BlogApp.Models;
+using BlogApp.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +10,12 @@ namespace BlogApp.Controllers
         //Register
         //Login
         //LogOut
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthController(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+        public AuthController(SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -36,11 +37,10 @@ namespace BlogApp.Controllers
             if (ModelState.IsValid)
             {
                 //Create  user object
-                var user = new IdentityUser
+                var user = new ApplicationUser
                 {
-                    UserName = model.Email,
+                    UserName = model.UserName,
                     Email = model.Email
-
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 //User successfully created

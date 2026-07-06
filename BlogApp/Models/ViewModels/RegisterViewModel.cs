@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogApp.Models.ViewModels
 {
     public class RegisterViewModel
     {
+        [Required(ErrorMessage ="Username is required")]
+        [StringLength(50, ErrorMessage = "Username cannot exceed 50 characters")]
+        public string UserName { get; set; }
+
         [Required(ErrorMessage ="Email is required")]
         [EmailAddress(ErrorMessage ="Invalid email format")]
         public string Email { get; set; }
@@ -13,6 +17,6 @@ namespace BlogApp.Models.ViewModels
         public string Password { get; set; }
         [Compare("Password",ErrorMessage ="ConfirmPassword must be match with Password")]
         [DataType(DataType.Password)]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set;}
     }
 }

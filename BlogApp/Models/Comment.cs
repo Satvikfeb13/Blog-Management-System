@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlogApp.Models
@@ -20,6 +20,16 @@ namespace BlogApp.Models
         public  int PostId { get; set; }
         public Post Post { get; set; }
 
+        public int? ParentCommentId { get; set; }
+        [ForeignKey("ParentCommentId")]
+        public Comment? ParentComment { get; set; }
+        public ICollection<Comment> Replies { get; set; } = new List<Comment>();
+        
+        public string? CreatedByUserId { get; set; }
+        [ForeignKey("CreatedByUserId")]
+        public ApplicationUser? CreatedByUser { get; set; }
 
+        public bool IsHidden { get; set; } = false;
+        public int ReportedCount { get; set; } = 0;
     }
 }

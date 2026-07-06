@@ -359,5 +359,24 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# -------------------------------------------------------------------
+# Custom BlogApp Additions
+# -------------------------------------------------------------------
+
+# Environment and Secrets
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Local.json
+.env
+.env.*
+secrets.json
+
+# User Uploaded Media (Uncomment if you want to ignore all uploaded images)
+# /BlogApp/wwwroot/images/*
+
+# Rider / IntelliJ IDE
+.idea/
+*.sln.iml
+*.DotSettings.user

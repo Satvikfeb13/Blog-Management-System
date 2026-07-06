@@ -1,4 +1,5 @@
 using BlogApp.Data;
+using BlogApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireNonAlphanumeric=false;
     options.Password.RequireDigit=false;    
@@ -14,6 +15,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequireUppercase=false;
     options.Password.RequiredLength = 1;
 }).AddEntityFrameworkStores<AppDbContext>();  
+
+builder.Services.AddScoped<BlogApp.Services.IPostService, BlogApp.Services.PostService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -33,7 +36,7 @@ var app = builder.Build();
  //Manual Dependency Injection
 using (var scope = app.Services.CreateScope())
    {
-    var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
     var _roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     string adminEmail = "admin@gmail.com";
@@ -47,7 +50,7 @@ using (var scope = app.Services.CreateScope())
      var existingEmail= await _userManager.FindByEmailAsync(adminEmail);
     if (existingEmail == null)
     {
-        var adminUser = new IdentityUser
+        var adminUser = new ApplicationUser
         {
             UserName = adminEmail,
             Email = adminEmail
