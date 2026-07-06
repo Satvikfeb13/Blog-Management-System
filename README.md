@@ -81,6 +81,33 @@ To test the Admin workflow (approving posts, moderating comments, viewing dashbo
 
 ---
 
+## 🧹 Helper Utilities
+
+### RemoveHtmlTagHelper
+Removes HTML tags from blog content when displaying preview text in the blog list.
+
+Example:
+```csharp
+RemoveHtmlTagHelper.removehtmltag(post.Content)
+```
+
+---
+
 ## 🧪 Git Management
 
 This repository includes a strict `.gitignore` designed for ASP.NET Core and JetBrains/Visual Studio development. Local configuration files (such as `appsettings.Development.json` and `.env`) are explicitly ignored to prevent sensitive database secrets from leaking.
+
+---
+
+## 👨‍💻 Author
+
+**Satvik Patil**
+
+GitHub:
+https://github.com/Satvikfeb13
+
+---
+
+## 📜 License
+
+This project is created for **learning and educational purposes**.
